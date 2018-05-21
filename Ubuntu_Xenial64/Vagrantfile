@@ -91,7 +91,7 @@ end
     echo ". ~/erlang/R16B02-basho10/activate" >> ~/.bashrc
     git clone https://github.com/basho/riak.git
     cd riak
-    git checkout tags/riak-2.2.5rc2
+    git checkout tags/riak-2.2.6
     make locked-all
     make package locked-all
    SHELL
