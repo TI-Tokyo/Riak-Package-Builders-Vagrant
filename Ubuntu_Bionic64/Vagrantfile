@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
-  config.vm.box = "debian/stretch64"
+  config.vm.box = "ubuntu/bionic64"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -56,7 +56,14 @@ Vagrant.configure("2") do |config|
   #   # Customize the amount of memory on the VM:
   #   vb.memory = "1024"
   # end
-  #
+  #  
+  
+config.vm.provider "virtualbox" do |vb|
+
+    vb.customize [ "modifyvm", :id, "--uartmode1", "disconnected" ]
+  
+end
+
   # View the documentation for the provider you are using for more
   # information on available options.
 
@@ -67,12 +74,13 @@ Vagrant.configure("2") do |config|
   #   apt-get update
   #   apt-get install -y apache2
   # SHELL
+#    apt-get install -y autoconf openssl git automake libssl1.0-dev libncurses5-dev build-essential curl fop xsltproc unixodbc-dev libpam0g-dev build-essential devscripts lintian diffutils patch patchutils debhelper
  
   config.vm.provision "shell", inline: <<-SHELL
     cd ~/
     apt-get update;
     apt-get upgrade;
-    apt-get install -y apt-file autoconf build-essential chrpath curl default-jdk devscripts flex git vim libncurses5-dev libpam-dev xsltproc libgnutls-openssl-dev libkrb5-dev libssl1.0-dev && apt-get -y clean 
+    apt-get install -y apt-file autoconf build-essential chrpath curl default-jdk devscripts flex git vim libncurses5-dev libpam-dev xsltproc libgnutls-openssl-dev libkrb5-dev libssl1.0-dev debhelper && apt-get -y clean 
     curl -O https://raw.githubusercontent.com/spawngrid/kerl/master/kerl
     chmod a+x kerl
     echo 'KERL_CONFIGURE_OPTIONS="--disable-hipe --enable-smp-support --enable-threads
@@ -84,7 +92,7 @@ Vagrant.configure("2") do |config|
     echo ". ~/erlang/R16B02-basho10/activate" >> ~/.bashrc
     git clone https://github.com/basho/riak.git
     cd riak
-    git checkout riak-2.2.6
+    git checkout tags/riak-2.2.6
     make locked-all
     make package locked-all
    SHELL
